@@ -12,8 +12,25 @@ const Purchase = sequelize.define('Purchase', {
     allowNull: false,
   },
   supplier_id: DataTypes.INTEGER,
+  product_id: DataTypes.INTEGER,
+  quantity: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1,
+  },
   purchase_date: DataTypes.DATEONLY,
   total_amount: DataTypes.DECIMAL(10, 2),
+  is_ordered: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  is_delivered: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  is_paid: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 }, {
   tableName: 'purchases',
   timestamps: false,

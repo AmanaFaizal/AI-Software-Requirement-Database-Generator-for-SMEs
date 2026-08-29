@@ -8,11 +8,27 @@ import { useBusiness } from '../context/BusinessContext';
 import BizGuideMark from '../components/BizGuideMark';
 import { tokens } from '../theme';
 
+import CategoryIcon from '@mui/icons-material/Category';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+
 // Signature nav treatment: each section gets a small colored "ledger tab"
 // on its left edge, echoing physical ledger-book dividers.
 const NAV_ITEMS = [
   { to: '/inventory', label: 'Inventory', icon: Inventory2Icon, tab: tokens.amber },
-  // Suppliers / Customers / Sales / Reminders will slot in here as they ship.
+  { to: '/categories', label: 'Categories', icon: CategoryIcon, tab: tokens.sapphire },
+  { to: '/dealers', label: 'Dealers', icon: LocalShippingIcon, tab: tokens.emerald },
+  { to: '/purchases', label: 'Purchase Orders', icon: ShoppingCartIcon, tab: tokens.rust },
+  { to: '/sales', label: 'Sales', icon: PointOfSaleIcon, tab: tokens.emerald },
+  { to: '/expenses', label: 'Expenses', icon: RequestQuoteIcon, tab: tokens.rust },
+  { to: '/invoices', label: 'Invoices', icon: ReceiptIcon, tab: tokens.violet },
+  { to: '/reports', label: 'Reports', icon: BarChartIcon, tab: tokens.charcoal },
+  { to: '/reminders', label: 'Reminders', icon: NotificationsIcon, tab: tokens.ink },
 ];
 
 export default function DashboardLayout() {

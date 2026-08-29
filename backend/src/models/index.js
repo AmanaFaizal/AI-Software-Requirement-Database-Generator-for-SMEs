@@ -11,6 +11,9 @@ const Sale = require('./sale');
 const SaleItem = require('./saleItem');
 const Note = require('./note');
 const Reminder = require('./reminder');
+const Category = require('./Category');
+const Invoice = require('./Invoice');
+const Expense = require('./Expense');
 
 // User -> Businesses (1:M)
 User.hasMany(Business, { foreignKey: 'user_id' });
@@ -58,6 +61,27 @@ SaleItem.belongsTo(Sale, { foreignKey: 'sale_id' });
 Product.hasMany(SaleItem, { foreignKey: 'product_id' });
 SaleItem.belongsTo(Product, { foreignKey: 'product_id' });
 
+// Categories
+Business.hasMany(Category, { foreignKey: 'business_id' });
+Category.belongsTo(Business, { foreignKey: 'business_id' });
+
+Category.hasMany(Product, { foreignKey: 'category_id' });
+Product.belongsTo(Category, { foreignKey: 'category_id' });
+
+// Invoices
+Business.hasMany(Invoice, { foreignKey: 'business_id' });
+Invoice.belongsTo(Business, { foreignKey: 'business_id' });
+
+Purchase.hasMany(Invoice, { foreignKey: 'purchase_id' });
+Invoice.belongsTo(Purchase, { foreignKey: 'purchase_id' });
+
+Sale.hasMany(Invoice, { foreignKey: 'sale_id' });
+Invoice.belongsTo(Sale, { foreignKey: 'sale_id' });
+
+// Expenses
+Business.hasMany(Expense, { foreignKey: 'business_id' });
+Expense.belongsTo(Business, { foreignKey: 'business_id' });
+
 module.exports = {
   sequelize,
   User,
@@ -71,4 +95,7 @@ module.exports = {
   SaleItem,
   Note,
   Reminder,
+  Category,
+  Invoice,
+  Expense,
 };
