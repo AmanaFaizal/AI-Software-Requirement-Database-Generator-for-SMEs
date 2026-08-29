@@ -10,6 +10,14 @@ import RegisterPage from './pages/RegisterPage';
 import BusinessSelectPage from './pages/BusinessSelectPage';
 import DashboardLayout from './pages/DashboardLayout';
 import InventoryPage from './pages/InventoryPage';
+import CategoriesPage from './pages/CategoriesPage';
+import DealersPage from './pages/DealersPage';
+import PurchasesPage from './pages/PurchasesPage';
+import InvoicesPage from './pages/InvoicesPage';
+import ReportsPage from './pages/ReportsPage';
+import RemindersPage from './pages/RemindersPage';
+import SalesPage from './pages/SalesPage';
+import ExpensesPage from './pages/ExpensesPage';
 
 function RootRedirect() {
   const { user } = useAuth();
@@ -43,6 +51,14 @@ export default function App() {
                 }
               >
                 <Route path="/inventory" element={<InventoryPage />} />
+                <Route path="/categories" element={<CategoriesPage />} />
+                <Route path="/dealers" element={<DealersPage />} />
+                <Route path="/purchases" element={<PurchasesPage />} />
+                <Route path="/sales" element={<SalesPage />} />
+                <Route path="/expenses" element={<ExpensesPage />} />
+                <Route path="/invoices" element={<InvoicesPage />} />
+                <Route path="/reports" element={<ReportsPage />} />
+                <Route path="/reminders" element={<RemindersPage />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

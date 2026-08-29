@@ -12,6 +12,7 @@ const Supplier = sequelize.define('Supplier', {
     allowNull: false,
   },
   supplier_name: DataTypes.STRING(150),
+  shop_name: DataTypes.STRING(150),
   phone: DataTypes.STRING(20),
   address: DataTypes.TEXT,
 }, {

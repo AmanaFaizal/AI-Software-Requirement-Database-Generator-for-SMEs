@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Product } = require('../models');
+const { Product, Category } = require('../models');
 const { assertOwnedBusiness } = require('./businessController');
 
 // All routes here are nested under /api/businesses/:businessId/products
@@ -20,7 +20,7 @@ exports.addProduct = async (req, res) => {
     const business = await ensureBusinessAccess(req, res);
     if (!business) return;
 
-    const { product_name, category, quantity, buy_price, selling_price } = req.body;
+    const { product_name, category_id, quantity, cost_price, selling_price } = req.body;
 
     if (!product_name) {
       return res.status(400).json({ message: 'product_name is required.' });
@@ -29,9 +29,9 @@ exports.addProduct = async (req, res) => {
     const product = await Product.create({
       business_id: business.business_id,
       product_name,
-      category,
+      category_id,
       quantity: quantity ?? 0,
-      buy_price,
+      cost_price,
       selling_price,
     });
 
@@ -48,21 +48,24 @@ exports.getProducts = async (req, res) => {
     const business = await ensureBusinessAccess(req, res);
     if (!business) return;
 
-    const { search, category, page = 1, limit = 20 } = req.query;
+    const { search, category_id, page = 1, limit = 20 } = req.query;
 
     const where = { business_id: business.business_id };
 
     if (search) {
       where.product_name = { [Op.like]: `%${search}%` };
     }
-    if (category) {
-      where.category = category;
+    if (category_id) {
+      where.category_id = category_id;
     }
 
     const offset = (Number(page) - 1) * Number(limit);
 
     const { rows, count } = await Product.findAndCountAll({
       where,
+      include: [
+        { model: Category, attributes: ['name'] }
+      ],
       order: [['created_at', 'DESC']],
       limit: Number(limit),
       offset,
@@ -91,6 +94,9 @@ exports.getProduct = async (req, res) => {
 
     const product = await Product.findOne({
       where: { product_id: req.params.productId, business_id: business.business_id },
+      include: [
+        { model: Category, attributes: ['name'] }
+      ]
     });
     if (!product) return res.status(404).json({ message: 'Product not found.' });
 
@@ -112,7 +118,7 @@ exports.updateProduct = async (req, res) => {
     });
     if (!product) return res.status(404).json({ message: 'Product not found.' });
 
-    const fields = ['product_name', 'category', 'quantity', 'buy_price', 'selling_price'];
+    const fields = ['product_name', 'category_id', 'quantity', 'cost_price', 'selling_price'];
     fields.forEach((field) => {
       if (req.body[field] !== undefined) product[field] = req.body[field];
     });

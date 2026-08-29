@@ -140,9 +140,9 @@ export default function InventoryPage() {
             <TableRow>
               <TableCell>Product</TableCell>
               <TableCell>Category</TableCell>
+              <TableCell align="right">Cost Price</TableCell>
+              <TableCell align="right">Selling Price</TableCell>
               <TableCell align="right">Stock</TableCell>
-              <TableCell align="right">Buy price</TableCell>
-              <TableCell align="right">Sell price</TableCell>
               <TableCell align="right" sx={{ width: 48 }} />
             </TableRow>
           </TableHead>

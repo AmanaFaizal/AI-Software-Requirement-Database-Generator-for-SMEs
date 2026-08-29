@@ -12,8 +12,8 @@ async function start() {
 
     // Creates tables if they don't exist yet, matching the models.
     // Use { alter: true } while iterating on the schema in development.
-    await sequelize.sync();
-    console.log('✅ Database synced.');
+    await sequelize.sync({ alter: true });
+    console.log('✅ Database synced with alter: true.');
 
     app.listen(PORT, () => {
       console.log(`🚀 BizGuide AI backend running on http://localhost:${PORT}`);

@@ -15,14 +15,17 @@ const Product = sequelize.define('Product', {
     type: DataTypes.STRING(150),
     allowNull: false,
   },
-  category: {
-    type: DataTypes.STRING(100),
+  category_id: {
+    type: DataTypes.INTEGER,
+  },
+  dealer_id: {
+    type: DataTypes.INTEGER,
   },
   quantity: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
   },
-  buy_price: {
+  cost_price: {
     type: DataTypes.DECIMAL(10, 2),
   },
   selling_price: {

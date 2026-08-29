@@ -1,8 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
-const Reminder = sequelize.define('Reminder', {
-  reminder_id: {
+const Category = sequelize.define('Category', {
+  category_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -11,15 +11,16 @@ const Reminder = sequelize.define('Reminder', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  title: DataTypes.STRING(150),
-  reminder_date: DataTypes.DATE,
-  status: {
-    type: DataTypes.ENUM('Pending', 'Completed'),
-    defaultValue: 'Pending',
+  name: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING(255),
   },
 }, {
-  tableName: 'reminders',
+  tableName: 'categories',
   timestamps: false,
 });
 
-module.exports = Reminder;
+module.exports = Category;
