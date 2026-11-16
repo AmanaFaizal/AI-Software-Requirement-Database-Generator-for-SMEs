@@ -7,6 +7,10 @@ const PORT = process.env.PORT || 5000;
 
 async function start() {
   try {
+    const authMode = process.env.BIZGUIDE_AUTH_MODE || 'direct';
+    if (!['direct', 'gateway'].includes(authMode)) {
+      throw new Error('BIZGUIDE_AUTH_MODE must be direct or gateway.');
+    }
     await sequelize.authenticate();
     console.log('✅ Connected to MySQL database.');
 
@@ -16,6 +20,7 @@ async function start() {
     console.log('✅ Database synced with alter: true.');
 
     app.listen(PORT, () => {
+      console.log(`Authentication mode: ${authMode}`);
       console.log(`🚀 BizGuide AI backend running on http://localhost:${PORT}`);
     });
   } catch (err) {

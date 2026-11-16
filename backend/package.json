@@ -4,9 +4,13 @@
   "description": "BizPilot AI - Backend (Express + MySQL + Sequelize)",
   "main": "server.js",
   "scripts": {
+    "test": "node --test",
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "db:sync": "node src/utils/syncDb.js"
+    "db:sync": "node src/utils/syncDb.js",
+    "verify:gateway": "node scripts/verify-integration.js",
+    "verify:backend": "node scripts/verify-integration.js --direct",
+    "start:gateway": "node scripts/start-gateway.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

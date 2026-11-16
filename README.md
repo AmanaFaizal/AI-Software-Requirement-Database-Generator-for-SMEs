@@ -1,5 +1,11 @@
 # BizGuide
 
+WSO2 API Manager integration: [setup, architecture and verification](docs/WSO2-PROJECT.md).
+The API definition covers all 36 backend operations. Live backend evidence is
+recorded separately from gateway evidence; see the guide before claiming full
+gateway integration. A [technical article](docs/WSO2-BLOG.md) is included
+for review and personalization.
+
 A small-business management app: React (Material UI) frontend talking to a
 Node.js + Express + MySQL backend. This stage covers **Auth → Businesses →
 Inventory** (add/view/edit/delete/search products), fully built and tested.

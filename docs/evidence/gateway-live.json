@@ -1,0 +1,442 @@
+{
+  "checkedAt": "2026-11-16T17:53:26.048Z",
+  "mode": "wso2-gateway",
+  "baseUrl": "https://localhost:8243/bizguide/1.0.0",
+  "checks": [
+    {
+      "name": "Gateway rejects missing credentials",
+      "method": "GET",
+      "path": "/api/health",
+      "expected": [
+        401
+      ],
+      "actual": 401,
+      "passed": true
+    },
+    {
+      "name": "GET /api/health",
+      "method": "GET",
+      "path": "/api/health",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "GET /api/auth/me",
+      "method": "GET",
+      "path": "/api/auth/me",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "Backend rejects missing user token",
+      "method": "GET",
+      "path": "/api/auth/me",
+      "expected": [
+        401
+      ],
+      "actual": 401,
+      "passed": true
+    },
+    {
+      "name": "Backend rejects invalid user token",
+      "method": "GET",
+      "path": "/api/auth/me",
+      "expected": [
+        401
+      ],
+      "actual": 401,
+      "passed": true
+    },
+    {
+      "name": "POST /api/businesses",
+      "method": "POST",
+      "path": "/api/businesses",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses",
+      "method": "GET",
+      "path": "/api/businesses",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5",
+      "method": "GET",
+      "path": "/api/businesses/5",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "PUT /api/businesses/5",
+      "method": "PUT",
+      "path": "/api/businesses/5",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "POST /api/businesses/5/categories",
+      "method": "POST",
+      "path": "/api/businesses/5/categories",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/categories",
+      "method": "GET",
+      "path": "/api/businesses/5/categories",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "PUT /api/businesses/5/categories/2",
+      "method": "PUT",
+      "path": "/api/businesses/5/categories/2",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "POST /api/businesses/5/dealers",
+      "method": "POST",
+      "path": "/api/businesses/5/dealers",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/dealers",
+      "method": "GET",
+      "path": "/api/businesses/5/dealers",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "PUT /api/businesses/5/dealers/2",
+      "method": "PUT",
+      "path": "/api/businesses/5/dealers/2",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "POST /api/businesses/5/products",
+      "method": "POST",
+      "path": "/api/businesses/5/products",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/products",
+      "method": "GET",
+      "path": "/api/businesses/5/products",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/products/3",
+      "method": "GET",
+      "path": "/api/businesses/5/products/3",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "PUT /api/businesses/5/products/3",
+      "method": "PUT",
+      "path": "/api/businesses/5/products/3",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "POST /api/businesses/5/purchases",
+      "method": "POST",
+      "path": "/api/businesses/5/purchases",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/purchases",
+      "method": "GET",
+      "path": "/api/businesses/5/purchases",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "PUT /api/businesses/5/purchases/2/status",
+      "method": "PUT",
+      "path": "/api/businesses/5/purchases/2/status",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "POST /api/businesses/5/sales",
+      "method": "POST",
+      "path": "/api/businesses/5/sales",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/products/3",
+      "method": "GET",
+      "path": "/api/businesses/5/products/3",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/sales",
+      "method": "GET",
+      "path": "/api/businesses/5/sales",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/invoices",
+      "method": "GET",
+      "path": "/api/businesses/5/invoices",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "POST /api/businesses/5/expenses",
+      "method": "POST",
+      "path": "/api/businesses/5/expenses",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/expenses",
+      "method": "GET",
+      "path": "/api/businesses/5/expenses",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "POST /api/businesses/5/reminders",
+      "method": "POST",
+      "path": "/api/businesses/5/reminders",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/reminders",
+      "method": "GET",
+      "path": "/api/businesses/5/reminders",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "PUT /api/businesses/5/reminders/2",
+      "method": "PUT",
+      "path": "/api/businesses/5/reminders/2",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "GET /api/businesses/5/reports/sales",
+      "method": "GET",
+      "path": "/api/businesses/5/reports/sales",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "Another user cannot read business inventory",
+      "method": "GET",
+      "path": "/api/businesses/5/products",
+      "expected": [
+        404
+      ],
+      "actual": 404,
+      "passed": true
+    },
+    {
+      "name": "DELETE /api/businesses/5/reminders/2",
+      "method": "DELETE",
+      "path": "/api/businesses/5/reminders/2",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "DELETE /api/businesses/5/expenses/2",
+      "method": "DELETE",
+      "path": "/api/businesses/5/expenses/2",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "DELETE /api/businesses/5/products/3",
+      "method": "DELETE",
+      "path": "/api/businesses/5/products/3",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "DELETE /api/businesses/5/categories/2",
+      "method": "DELETE",
+      "path": "/api/businesses/5/categories/2",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "DELETE /api/businesses/5/dealers/2",
+      "method": "DELETE",
+      "path": "/api/businesses/5/dealers/2",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "POST /api/businesses",
+      "method": "POST",
+      "path": "/api/businesses",
+      "expected": [
+        201
+      ],
+      "actual": 201,
+      "passed": true
+    },
+    {
+      "name": "DELETE /api/businesses/6",
+      "method": "DELETE",
+      "path": "/api/businesses/6",
+      "expected": [
+        200
+      ],
+      "actual": 200,
+      "passed": true
+    }
+  ],
+  "retainedTestBusinessId": 5,
+  "fixtureNote": "Generated test accounts and business financial records remain; only disposable fixtures were deleted.",
+  "passed": true,
+  "coveredOperations": 36,
+  "gatewayAuthentication": "Publisher Internal-Key"
+}

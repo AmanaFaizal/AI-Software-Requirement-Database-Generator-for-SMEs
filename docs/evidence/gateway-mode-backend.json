@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-11-16T17:45:12.613Z",
+  "scope": "Direct backend calls verifying gateway-mode header handling; no WSO2 traversal",
+  "checks": [
+    {
+      "header": "X-BizGuide-Token",
+      "expected": 200,
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "header": "Authorization",
+      "expected": 401,
+      "actual": 401,
+      "passed": true
+    }
+  ]
+}

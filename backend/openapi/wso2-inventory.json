@@ -1,0 +1,1896 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "BizGuide API",
+    "version": "1.0.0",
+    "description": "All backend routes grouped by feature. WSO2 validates OAuth; protected routes require X-BizGuide-Token."
+  },
+  "servers": [
+    {
+      "url": "https://localhost:8243/bizguide/1.0.0"
+    }
+  ],
+  "security": [
+    {
+      "gatewayOAuth": []
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "operationId": "registerUser",
+        "summary": "Create user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account created; returns BizGuide JWT and user"
+          },
+          "400": {
+            "description": "name, email and password are required"
+          },
+          "409": {
+            "description": "An account with this email already exists"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "Backend healthy"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "BizGuide JWT and user"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/businesses": {
+      "get": {
+        "operationId": "listOwnedBusinesses",
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Owned businesses"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "404": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Businesses"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "post_api_businesses",
+        "responses": {
+          "201": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "404": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Businesses"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "business_name": {
+                    "type": "string"
+                  },
+                  "business_type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "business_name"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/products": {
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "get": {
+        "operationId": "listProducts",
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 20
+            }
+          },
+          {
+            "name": "category_id",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products and pagination"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "404": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      },
+      "post": {
+        "operationId": "post_api_businesses__businessId__products",
+        "responses": {
+          "201": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "404": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Products"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_name": {
+                    "type": "string"
+                  },
+                  "category_id": {
+                    "type": "integer"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "cost_price": {
+                    "type": "number"
+                  },
+                  "selling_price": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "product_name"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/products/{productId}": {
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        {
+          "name": "productId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "get": {
+        "operationId": "getProduct",
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "put": {
+        "operationId": "put_api_businesses__businessId__products__productId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Products"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_name": {
+                    "type": "string"
+                  },
+                  "category_id": {
+                    "type": "integer"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "cost_price": {
+                    "type": "number"
+                  },
+                  "selling_price": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "delete_api_businesses__businessId__products__productId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Products"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "operationId": "get_api_auth_me",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}": {
+      "get": {
+        "operationId": "get_api_businesses__businessId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "404": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Businesses"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "put": {
+        "operationId": "put_api_businesses__businessId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "404": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Businesses"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "business_name": {
+                    "type": "string"
+                  },
+                  "business_type": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "delete_api_businesses__businessId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "404": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Businesses"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/categories": {
+      "get": {
+        "operationId": "get_api_businesses__businessId__categories",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Categories"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "post": {
+        "operationId": "post_api_businesses__businessId__categories",
+        "responses": {
+          "201": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Categories"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "names": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "anyOf": [
+                  {
+                    "required": [
+                      "name"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "names"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/categories/{categoryId}": {
+      "put": {
+        "operationId": "put_api_businesses__businessId__categories__categoryId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Categories"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        {
+          "name": "categoryId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "delete": {
+        "operationId": "delete_api_businesses__businessId__categories__categoryId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Categories"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/dealers": {
+      "get": {
+        "operationId": "get_api_businesses__businessId__dealers",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Dealers"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "post": {
+        "operationId": "post_api_businesses__businessId__dealers",
+        "responses": {
+          "201": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Dealers"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "supplier_name": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "supplier_name"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/dealers/{dealerId}": {
+      "put": {
+        "operationId": "put_api_businesses__businessId__dealers__dealerId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Dealers"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "supplier_name": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        {
+          "name": "dealerId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "delete": {
+        "operationId": "delete_api_businesses__businessId__dealers__dealerId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Dealers"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/purchases": {
+      "get": {
+        "operationId": "get_api_businesses__businessId__purchases",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Purchases"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "post": {
+        "operationId": "post_api_businesses__businessId__purchases",
+        "responses": {
+          "201": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Purchases"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "supplier_id": {
+                    "type": "integer"
+                  },
+                  "purchase_date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "total_amount": {
+                    "type": "number"
+                  },
+                  "is_ordered": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/purchases/{purchaseId}/status": {
+      "put": {
+        "operationId": "put_api_businesses__businessId__purchases__purchaseId__status",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Purchases"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "is_ordered": {
+                    "type": "boolean"
+                  },
+                  "is_delivered": {
+                    "type": "boolean"
+                  },
+                  "is_paid": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        {
+          "name": "purchaseId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "/api/businesses/{businessId}/invoices": {
+      "get": {
+        "operationId": "get_api_businesses__businessId__invoices",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Invoices"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "/api/businesses/{businessId}/reports/sales": {
+      "get": {
+        "operationId": "get_api_businesses__businessId__reports_sales",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Reports"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "/api/businesses/{businessId}/reminders": {
+      "get": {
+        "operationId": "get_api_businesses__businessId__reminders",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Reminders"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "post": {
+        "operationId": "post_api_businesses__businessId__reminders",
+        "responses": {
+          "201": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Reminders"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "reminder_date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "reminder_date"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/reminders/{reminderId}": {
+      "put": {
+        "operationId": "put_api_businesses__businessId__reminders__reminderId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Reminders"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "reminder_date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        {
+          "name": "reminderId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "delete": {
+        "operationId": "delete_api_businesses__businessId__reminders__reminderId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Reminders"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/expenses": {
+      "get": {
+        "operationId": "get_api_businesses__businessId__expenses",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Expenses"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "post": {
+        "operationId": "post_api_businesses__businessId__expenses",
+        "responses": {
+          "201": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Expenses"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "expense_date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "category",
+                  "amount"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    },
+    "/api/businesses/{businessId}/expenses/{expenseId}": {
+      "delete": {
+        "operationId": "delete_api_businesses__businessId__expenses__expenseId_",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Expenses"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        {
+          "name": "expenseId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "/api/businesses/{businessId}/sales": {
+      "get": {
+        "operationId": "get_api_businesses__businessId__sales",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Sales"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "businessId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "post": {
+        "operationId": "post_api_businesses__businessId__sales",
+        "responses": {
+          "201": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid or missing request fields"
+          },
+          "401": {
+            "description": "Missing or invalid BizGuide JWT"
+          },
+          "403": {
+            "description": "Business not found or not owned"
+          },
+          "500": {
+            "description": "Backend server error"
+          }
+        },
+        "tags": [
+          "Sales"
+        ],
+        "security": [
+          {
+            "gatewayOAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_id": {
+                    "type": "integer"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "customer_id": {
+                    "type": "integer"
+                  },
+                  "sale_date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "product_id",
+                  "quantity"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bizguideToken"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "businessId": {
+        "name": "businessId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "bizguideToken": {
+        "name": "X-BizGuide-Token",
+        "in": "header",
+        "required": true,
+        "description": "Bearer followed by the token returned by /api/auth/login. Separate from WSO2 OAuth or Publisher Internal-Key.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "securitySchemes": {
+      "gatewayOAuth": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://localhost:9443/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "Businesses"
+    },
+    {
+      "name": "Products"
+    },
+    {
+      "name": "Categories"
+    },
+    {
+      "name": "Dealers"
+    },
+    {
+      "name": "Purchases"
+    },
+    {
+      "name": "Invoices"
+    },
+    {
+      "name": "Sales"
+    },
+    {
+      "name": "Expenses"
+    },
+    {
+      "name": "Reminders"
+    },
+    {
+      "name": "Reports"
+    },
+    {
+      "name": "Health"
+    }
+  ]
+}
